@@ -4,4 +4,5 @@
 //! - [`toast`] — a framework-level toast queue (a context-provided dispatch
 //!   handle, a bounded queue, and a render model; bring your own visuals).
 
+pub mod frame;
 pub mod toast;
