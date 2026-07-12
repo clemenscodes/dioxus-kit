@@ -1,16 +1,13 @@
-//! Headless dialog frame primitive.
+//! Headless dialog frame primitive — structure + behavior, **zero look**.
 //!
-//! Structure + behavior: it wraps `dioxus_primitives`' `DialogRoot` (focus trap,
-//! escape / outside dismiss) and its `DialogContent`, and places the [`Frame`]'s
-//! three regions inside a **content container** the consumer styles via `class:`
-//! (the standard attributes extension — the one sanctioned way a class flows). A
-//! consuming app puts its own `classes!` `CLASS` there and never hand-builds an
-//! attribute.
-//!
-//! The dialog owns a neutral **structural** backdrop (fixed, centred, a plain
-//! scrim). A modal needs one, and the consumer's single `class:` is spent on the
-//! content — so the app-specific look lives entirely on the content container while
-//! the backdrop stays a look-agnostic positioner. Consumers never style it.
+//! It wraps `dioxus_primitives`' `DialogRoot` (focus trap, escape / outside
+//! dismiss — `DialogRoot` renders the dismiss overlay itself) and its
+//! `DialogContent`, and places the [`Frame`]'s three regions inside a single
+//! content container the consumer styles via `class:` — the one sanctioned way a
+//! class flows. A consuming app puts its own `classes!` `CLASS` there (a
+//! `ClassList` is `IntoAttributeValue`, so `class:` works); this crate hand-builds
+//! no attribute and carries no style of its own. The consumer's class owns the
+//! entire look, positioning included.
 //!
 //! Body scroll-lock is intentionally not owned here yet (a follow-up); `DialogRoot`
 //! already provides focus trap, escape, and outside-dismiss.
@@ -18,11 +15,6 @@
 use browser_kit::frame::{Frame, Render};
 use dioxus::prelude::*;
 use dioxus_primitives::dialog::{DialogContent, DialogRoot};
-
-/// The neutral structural backdrop: fixed, centred, a plain scrim. Not app-specific
-/// look — the consumer styles the content container, never this positioner.
-const BACKDROP_STYLE: &str =
-    "position:fixed;inset:0;display:grid;place-items:center;background:rgba(0,0,0,0.5)";
 
 /// The headless dialog's props.
 #[derive(Props, Clone, PartialEq)]
@@ -34,15 +26,15 @@ pub struct DialogModel<F: Frame<Output = Element>> {
     pub open: bool,
     /// Fired when the open state changes (escape, outside click, programmatic).
     pub on_open_change: Callback<bool>,
-    /// Styling for the **content container** (the inner box that holds the regions).
-    /// Use `class:` at the call site — it collects here through the attributes
-    /// extension. The backdrop is owned by the dialog and is not styled here.
+    /// Styling for the content container. Use `class:` at the call site — it
+    /// collects here through the attributes extension. This crate adds no style of
+    /// its own; the consumer's class owns the whole look.
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
 }
 
-/// A headless dialog frame: `DialogRoot` behavior + a neutral backdrop wrapping a
-/// consumer-styled content container that places the frame's header, body, and footer.
+/// A headless dialog frame: `DialogRoot` behavior around a single consumer-styled
+/// content container that places the frame's header, body, and footer regions.
 #[component]
 pub fn Dialog<F: Frame<Output = Element>>(props: DialogModel<F>) -> Element {
     let frame = props.frame;
@@ -62,15 +54,12 @@ pub fn Dialog<F: Frame<Output = Element>>(props: DialogModel<F>) -> Element {
         DialogRoot {
             open,
             on_open_change,
-            div {
-                style: BACKDROP_STYLE,
-                DialogContent {
-                    div {
-                        ..attributes,
-                        {header}
-                        {body}
-                        {footer}
-                    }
+            DialogContent {
+                div {
+                    ..attributes,
+                    {header}
+                    {body}
+                    {footer}
                 }
             }
         }
