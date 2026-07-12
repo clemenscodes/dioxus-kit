@@ -10,7 +10,7 @@ pub struct PageModel<F: Frame<Output = Element>> {
     /// The frame whose regions this page places.
     #[props(default)]
     pub frame: F,
-    /// Styling for the page surface. Use `class:` at the call site.
+    /// Styling for the page container. Use `class:` at the call site.
     #[props(extends = GlobalAttributes)]
     pub attributes: Vec<Attribute>,
 }
