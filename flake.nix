@@ -38,7 +38,22 @@
 
         craneLib = (crane.mkLib pkgs).overrideToolchain rustToolchain;
 
-        src = craneLib.cleanCargoSource ./.;
+        # cleanCargoSource drops every non-Rust file, which would take
+        # rustfmt.toml, clippy.toml and deny.toml with it. The first two would
+        # leave the fmt and clippy gates judging this tree by defaults instead
+        # of by its own settings. The third is worse, because cargo deny falls
+        # back to its own policy without saying so and the license gate then
+        # passes for a reason that has nothing to do with the list it was meant
+        # to enforce.
+        src = pkgs.lib.fileset.toSource {
+          root = ./.;
+          fileset = pkgs.lib.fileset.unions [
+            (craneLib.fileset.commonCargoSources ./.)
+            ./rustfmt.toml
+            ./clippy.toml
+            ./deny.toml
+          ];
+        };
 
         commonArgs = {
           inherit src;
@@ -63,6 +78,14 @@
           });
 
         cargoTest = craneLib.cargoTest (commonArgs // {inherit cargoArtifacts;});
+
+        # This crate ends up in the dependency tree of a product that is sold,
+        # so the license of everything it drags along is a build failure rather
+        # than something to notice later. deny.toml holds the list.
+        cargoDeny = craneLib.cargoDeny {
+          inherit src;
+          cargoDenyChecks = "licenses";
+        };
       in {
         formatter = pkgs.alejandra;
 
@@ -72,7 +95,7 @@
         };
 
         checks = {
-          inherit dioxusKit cargoFmt cargoClippy cargoTest;
+          inherit dioxusKit cargoFmt cargoClippy cargoTest cargoDeny;
         };
 
         devShells.default = pkgs.mkShell {

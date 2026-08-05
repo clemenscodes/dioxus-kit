@@ -76,7 +76,7 @@ version = "0.2.0"
 source = "git+https://github.com/clemenscodes/browser-kit?tag=v0.2.0#e88d8a36e1b15169115f87f32483c4e77bd5cd86"
 dependencies = [
  "base64",
- "ddd",
+ "ddd 0.2.0 (git+https://github.com/clemenscodes/ddd?tag=v0.2.0)",
  "flate2",
  "js-sys",
  "wasm-bindgen",
@@ -267,6 +267,11 @@ checksum = "a4ae5f15dda3c708c0ade84bfee31ccab44a3da4f88015ed22f63732abe300c8"
 name = "ddd"
 version = "0.2.0"
 source = "git+https://github.com/clemenscodes/ddd?tag=v0.2.0#30aa81c432476c169405048a84c51e4be0ba5974"
+
+[[package]]
+name = "ddd"
+version = "0.2.0"
+source = "git+https://github.com/clemenscodes/ddd?rev=3192a69#3192a69ff034635dfb9dbcb38675906560545700"
 
 [[package]]
 name = "deranged"
@@ -531,7 +536,7 @@ name = "dioxus-kit"
 version = "0.2.0"
 dependencies = [
  "browser-kit",
- "ddd",
+ "ddd 0.2.0 (git+https://github.com/clemenscodes/ddd?rev=3192a69)",
  "dioxus",
  "dioxus-primitives",
 ]

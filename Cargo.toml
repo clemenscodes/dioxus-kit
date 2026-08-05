@@ -5,7 +5,7 @@ members = ["crates/dioxus-kit"]
 [workspace.package]
 authors = ["clemenscodes"]
 edition = "2024"
-license = "AGPL-3.0-only"
+license = "MIT"
 version = "0.2.0"
 
 [workspace.dependencies]

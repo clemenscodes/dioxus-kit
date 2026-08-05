@@ -138,13 +138,19 @@ pub struct Toasts {
 impl Toasts {
     /// Construct the handle from the provider's add callback.
     pub(crate) fn new(add_toast: Callback<AddToastRequest>) -> Self {
-        Self { add_toast }
+        Self {
+            add_toast,
+        }
     }
 
     /// Dispatch a toast of the given type with the given title and options.
     pub fn show(&self, title: String, toast_type: ToastType, options: ToastOptions) {
         let permanent = options.permanent;
-        let duration = if permanent { None } else { options.duration };
+        let duration = if permanent {
+            None
+        } else {
+            options.duration
+        };
         let request = AddToastRequest {
             title,
             description: options.description,
