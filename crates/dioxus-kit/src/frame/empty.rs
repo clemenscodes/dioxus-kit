@@ -8,11 +8,19 @@ use dioxus::prelude::*;
 #[derive(Clone, PartialEq, Default)]
 pub struct EmptyView;
 
+impl ddd::Layered for EmptyView {
+    type Layer = ddd::PresentationLayer;
+}
+
 impl ddd::View for EmptyView {}
 
 /// The internal model for [`Empty`] (carries nothing).
 #[derive(Clone, PartialEq, Default)]
 pub struct EmptyModel;
+
+impl ddd::Layered for EmptyModel {
+    type Layer = ddd::PresentationLayer;
+}
 
 impl From<&EmptyView> for EmptyModel {
     fn from(_view: &EmptyView) -> Self {
