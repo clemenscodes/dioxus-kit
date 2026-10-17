@@ -72,8 +72,8 @@ dependencies = [
 
 [[package]]
 name = "browser-kit"
-version = "0.3.0"
-source = "git+https://github.com/clemenscodes/browser-kit?tag=v0.3.0#e702a83e33e4918865dd91c3cc13d446a76833f6"
+version = "0.3.1"
+source = "git+https://github.com/clemenscodes/browser-kit?tag=v0.3.1#b44dac6efa4308cc468b594af0ecbb51176da8aa"
 dependencies = [
  "base64",
  "ddd",
