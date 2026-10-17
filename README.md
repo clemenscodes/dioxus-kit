@@ -8,5 +8,5 @@ Add it as a git dependency, pinned to a tag:
 
 ```toml
 [dependencies]
-dioxus-kit = { git = "https://github.com/clemenscodes/dioxus-kit", tag = "v0.1.0" }
+dioxus-kit = { git = "https://github.com/clemenscodes/dioxus-kit", tag = "v0.5.0" }
 ```
